@@ -8,8 +8,16 @@
         <groupId>demo</groupId>
         <version>${revision}</version>
     </parent>
-    <artifactId>availability-service</artifactId>
+    <artifactId>notification-service</artifactId>
     <packaging>jar</packaging>
-    <name>availability-service</name>
-    <description>availability-service</description>
+    <name>notification-service</name>
+    <description>notification-service</description>
+
+    <dependencies>
+        <!-- Messaging -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
+        </dependency>
+    </dependencies>
 </project>

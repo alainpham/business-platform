@@ -11,6 +11,8 @@
   <modules>
     <module>business-hub</module>
     <module>availability-service</module>
+    <module>notification-service</module>
+    <module>message-consumer</module>
   </modules>
 
   <properties>
@@ -93,7 +95,6 @@
       <artifactId>fakeload</artifactId>
       <version>0.7.0</version>
     </dependency>
-
 
   </dependencies>
 

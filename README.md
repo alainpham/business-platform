@@ -85,8 +85,12 @@ mvn exec:exec@buildpush -f message-consumer/pom.xml
 ## Deploy kube using maven
 
 ```bash
+kubectl create ns business-platform
+kubectl config set-context --current --namespace=business-platform
+
 mvn exec:exec@kdelete exec:exec@kdeploy -f business-hub/pom.xml
 mvn exec:exec@kdelete exec:exec@kdeploy -f availability-service/pom.xml
+mvn exec:exec@kdelete exec:exec@kdeploy -f notification-service/pom.xml
 
 ```
 
