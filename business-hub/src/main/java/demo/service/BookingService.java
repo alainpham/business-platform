@@ -63,9 +63,11 @@ public class BookingService {
 
         /* every 500 iterations reset everything */
         if (counter.get() > 500){
-            logger.info("reset DB");
+            logger.info("reset DB due to counter > 500");
             bookingRepository.deleteAll();
             restTemplate.getForObject(availabilityServiceUrl + "/reset", String.class);
+            /* reset counter */
+            counter.set(0);
         }
 
         /* if available save the booking*/
@@ -89,15 +91,15 @@ public class BookingService {
             /* its already booked */
             input.setRoom(null);
             input.setHotel(null);;
-            logger.info("dates a booked, abandoning booking");
+            logger.info("dates are booked, abandoning booking");
         }
 
         return new ResponseEntity<>(input, HttpStatus.OK);
     }
 
-    @Scheduled(fixedRate = 60000*5) // 10000 milliseconds = 10 seconds
-    public void myScheduledMethod() {
-        logger.info("reset DB");
-        bookingRepository.deleteAll();
-    }
+    // @Scheduled(fixedRate = 60000*5) // 10000 milliseconds = 10 seconds
+    // public void myScheduledMethod() {
+    //     logger.info("reset DB as scheduled");
+    //     bookingRepository.deleteAll();
+    // }
 }

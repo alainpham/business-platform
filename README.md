@@ -3,6 +3,7 @@
   - [architecture diagram](#architecture-diagram)
   - [Env vars](#env-vars)
   - [Build and push to dockerhub](#build-and-push-to-dockerhub)
+  - [Deploy kube using maven](#deploy-kube-using-maven)
   - [run the demo with docker](#run-the-demo-with-docker)
     - [Optionally create a dedicated network](#optionally-create-a-dedicated-network)
     - [Launch broker](#launch-broker)
@@ -34,6 +35,7 @@ This is a guide to deploy a set of synchronous and asynchronous microservices in
 
 ```bash 
 export MAIN_PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+export OTLP_ENDPOINT=$(mvn help:evaluate -Dexpression=otlp.endpoint -q -DforceStdout)
 export ACTIVEMQ_ARTEMIS_VERSION=2.33.0
 export OTELCOL_VERSION=0.96.0
 export K6_VERSION=0.50.0
@@ -80,6 +82,13 @@ mvn exec:exec@buildpush -f message-consumer/pom.xml
 
 ```
 
+## Deploy kube using maven
+
+```bash
+mvn exec:exec@kdelete exec:exec@kdeploy -f business-hub/pom.xml
+mvn exec:exec@kdelete exec:exec@kdeploy -f availability-service/pom.xml
+
+```
 
 ## run the demo with docker
 
