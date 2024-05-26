@@ -1,0 +1,199 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  ports:
+  - port: 3333
+    protocol: TCP
+    targetPort: 3333
+  selector:
+    app: nginx
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: javatestserver
+  name: javatestserver
+spec:
+  ports:
+  - port: 8085
+    protocol: TCP
+    targetPort: 8085
+  selector:
+    app: javatestserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: rusttestserver
+  name: rusttestserver
+spec:
+  ports:
+  - port: 8090
+    protocol: TCP
+    targetPort: 8090
+  selector:
+    app: rusttestserver
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: gotestserver
+  name: gotestserver
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: gotestserver
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javatestserver
+  labels:
+    app: javatestserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: javatestserver
+  template:
+    metadata:
+      labels:
+        app: javatestserver
+    spec:
+      containers:
+        - name: javatestserver
+          image: ghcr.io/grafana/beyla-demo/greeting-graalvm-native/0.0.1
+          ports:
+            - containerPort: 8085
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rusttestserver
+  labels:
+    app: rusttestserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rusttestserver
+  template:
+    metadata:
+      labels:
+        app: rusttestserver
+    spec:
+      containers:
+        - name: rusttestserver
+          image: ghcr.io/grafana/beyla-demo/greeting-actix-rust/0.0.1
+          ports:
+            - containerPort: 8090
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gotestserver
+  labels:
+    app: gotestserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gotestserver
+  template:
+    metadata:
+      labels:
+        app: gotestserver
+    spec:
+      containers:
+        - name: gotestserver
+          image: ghcr.io/grafana/beyla-demo/greeting-go/0.0.1
+          ports:
+            - containerPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 3333
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+          readOnly: true
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  nginx.conf: |
+    
+    events {}
+    
+    http {
+        server {
+            listen 3333;
+            server_name _;
+            
+            location /greeting {
+                proxy_pass http://javatestserver.default.svc.cluster.local:8085/greeting;
+                proxy_set_header X-Real-IP  $remote_addr;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_http_version 1.1;
+            }
+            
+            location /smoke {
+                proxy_pass http://rusttestserver.default.svc.cluster.local:8090/smoke;
+                proxy_set_header X-Real-IP  $remote_addr;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_http_version 1.1;
+            }
+            
+            location /ping {
+                proxy_pass http://gotestserver.default.svc.cluster.local:8080/ping;
+                proxy_set_header X-Real-IP  $remote_addr;
+                proxy_set_header X-Forwarded-For $remote_addr;
+                proxy_set_header Host $host;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_http_version 1.1;
+            }
+        }
+    }
+---
