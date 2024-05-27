@@ -75,10 +75,13 @@ export NGINX_INGRESS_KUBE_WEBHOOK_CERTGEN_VERSION=v1.4.1
 
 ```bash
 mvn package
-mvn exec:exec@buildpush -f business-hub/pom.xml
-mvn exec:exec@buildpush -f availability-service/pom.xml
-mvn exec:exec@buildpush -f notification-service/pom.xml
-mvn exec:exec@buildpush -f message-consumer/pom.xml
+mvn package exec:exec@buildpush -f business-hub/pom.xml
+mvn package exec:exec@buildpush -f availability-service/pom.xml
+mvn package exec:exec@buildpush -f notification-service/pom.xml
+mvn package exec:exec@buildpush -f message-consumer/pom.xml
+
+mvn package exec:exec@buildpush -f public-api/pom.xml
+mvn package exec:exec@buildpush -f data-batcher/pom.xml
 
 ```
 
@@ -88,10 +91,24 @@ mvn exec:exec@buildpush -f message-consumer/pom.xml
 kubectl create ns business-platform
 kubectl config set-context --current --namespace=business-platform
 
+mvn exec:exec@kdeploy -f business-hub/pom.xml
+mvn exec:exec@kdeploy -f availability-service/pom.xml
+mvn exec:exec@kdeploy -f notification-service/pom.xml
+APPLICATION_NAME=email mvn exec:exec@kdeploy -f message-consumer/pom.xml
+APPLICATION_NAME=sms mvn exec:exec@kdeploy -f message-consumer/pom.xml
+
+mvn exec:exec@kdeploy -f public-api/pom.xml
+mvn exec:exec@kdeploy -f data-batcher/pom.xml
+
+
 mvn exec:exec@kdelete exec:exec@kdeploy -f business-hub/pom.xml
 mvn exec:exec@kdelete exec:exec@kdeploy -f availability-service/pom.xml
 mvn exec:exec@kdelete exec:exec@kdeploy -f notification-service/pom.xml
+APPLICATION_NAME=email mvn exec:exec@kdelete exec:exec@kdeploy -f message-consumer/pom.xml
+APPLICATION_NAME=sms mvn exec:exec@kdelete exec:exec@kdeploy -f message-consumer/pom.xml
 
+mvn exec:exec@kdelete  exec:exec@kdeploy -f public-api/pom.xml
+mvn exec:exec@kdelete  exec:exec@kdeploy -f data-batcher/pom.xml
 ```
 
 ## run the demo with docker
