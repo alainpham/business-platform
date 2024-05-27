@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -28,6 +31,7 @@ import demo.model.EquipementInfo;
 import jakarta.annotation.PostConstruct;
 
 @Component
+@RestController
 public class Batches {
     private static final Logger logger = LoggerFactory.getLogger(Batches.class);
 
@@ -47,6 +51,8 @@ public class Batches {
     
 	private List<String> anomalyMessages = new ArrayList<>();
 
+	private boolean forceFail = false;
+
 	@PostConstruct
 	public void init() throws IOException {
 		String data = resourceLoader.getResource("classpath:data/data.json").getContentAsString(StandardCharsets.UTF_8);
@@ -63,6 +69,18 @@ public class Batches {
         anomalyMessages.add("Critical Error: Network Latency Spike - Latency exceeds 500ms in the primary network. Potential bottleneck or hardware failure identified.");
 
 	}
+
+	@GetMapping("/forcefail")
+	public void forceFail() {
+		forceFail = true;
+	}
+
+
+	@GetMapping("/forcenormal")
+	public void forceNormal() { 
+		forceFail = false;
+	}
+
 
     @Scheduled(fixedRate = 60000)
 	public void batchSchedule() throws IOException {
@@ -85,7 +103,7 @@ public class Batches {
 		/* determine failure range every forth equipment should fail*/
 		Calendar currentCalendar = GregorianCalendar.getInstance();
 		int currenHourOfDay = currentCalendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
-		boolean shouldFail = currenHourOfDay >= 9 && currenHourOfDay <= 10 && equipementInfo.getId() % 4 == 0;
+		boolean shouldFail = currenHourOfDay >= 2 && currenHourOfDay <= 3 && equipementInfo.getId() % 4 == 0;
 
 		long start = System.currentTimeMillis();
 		logger.info("batchprocess=\"{}\" state={} id={}", equipementInfo.getName(), "started",start);
@@ -96,7 +114,7 @@ public class Batches {
 			e.printStackTrace();
 		}
 		long end = System.currentTimeMillis();
-		if (shouldFail) {
+		if (shouldFail || forceFail) {
 			logger.error("batchprocess=\"{}\" error=\"{}\" id={}", equipementInfo.getName(), anomalyMessages.get(r.nextInt(anomalyMessages.size())),start);
 			logger.error("batchprocess=\"{}\" error=\"{}\" id={}", equipementInfo.getName(), anomalyMessages.get(r.nextInt(anomalyMessages.size())),start);
 

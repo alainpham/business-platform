@@ -18,7 +18,7 @@
   </modules>
 
   <properties>
-    <revision>2.0.2</revision>
+    <revision>2.0.4</revision>
     <spring.boot.version>3.3.0</spring.boot.version>
     <springdoc.openapi.version>2.5.0</springdoc.openapi.version>
     <opentelemetry.version>2.4.0</opentelemetry.version>
@@ -246,6 +246,7 @@
                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
+                <OTLP_ENDPOINT>${otlp.endpoint}</OTLP_ENDPOINT>
                 <KUBE_INGRESS_ROOT_DOMAIN>${kube.ingress.root.domain}</KUBE_INGRESS_ROOT_DOMAIN>
               </environmentVariables>
             </configuration>
@@ -266,6 +267,7 @@
                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
                 <PROJECT_VERSION>${project.version}</PROJECT_VERSION>
                 <CONTAINER_REGISTRY>${container.registry}</CONTAINER_REGISTRY>
+                <OTLP_ENDPOINT>${otlp.endpoint}</OTLP_ENDPOINT>
                 <KUBE_INGRESS_ROOT_DOMAIN>${kube.ingress.root.domain}</KUBE_INGRESS_ROOT_DOMAIN>
               </environmentVariables>
             </configuration>
