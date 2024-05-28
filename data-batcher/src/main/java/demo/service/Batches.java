@@ -82,7 +82,7 @@ public class Batches {
 	}
 
 
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 60000*5)
 	public void batchSchedule() throws IOException {
 		logger.info("The time is now {}", new Date());
 		// for (Map.Entry<Integer, EquipementInfo> entry : equipementInfoMap.entrySet()) {
@@ -104,6 +104,7 @@ public class Batches {
 		Calendar currentCalendar = GregorianCalendar.getInstance();
 		int currenHourOfDay = currentCalendar.get(Calendar.HOUR_OF_DAY); // gets hour in 24h format
 		boolean shouldFail = currenHourOfDay >= 2 && currenHourOfDay <= 3 && equipementInfo.getId() % 4 == 0;
+		logger.debug("current hour of day: {}, should fail: {}", currenHourOfDay,shouldFail);
 
 		long start = System.currentTimeMillis();
 		logger.info("batchprocess=\"{}\" state={} id={}", equipementInfo.getName(), "started",start);

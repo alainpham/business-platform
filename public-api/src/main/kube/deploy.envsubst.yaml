@@ -104,6 +104,8 @@ spec:
             value: ${PROJECT_ARTIFACTID}
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: "${OTLP_ENDPOINT}"
+          - name: OTEL_INSTRUMENTATION_MICROMETER_ENABLED
+            value: "true"
           - name: OTEL_JAVAAGENT_ENABLED
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES

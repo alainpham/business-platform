@@ -18,7 +18,7 @@
   </modules>
 
   <properties>
-    <revision>2.0.4</revision>
+    <revision>2.0.6</revision>
     <spring.boot.version>3.3.0</spring.boot.version>
     <springdoc.openapi.version>2.5.0</springdoc.openapi.version>
     <opentelemetry.version>2.4.0</opentelemetry.version>
@@ -96,6 +96,11 @@
       <groupId>com.martensigwart</groupId>
       <artifactId>fakeload</artifactId>
       <version>0.7.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>micrometer-registry-prometheus</artifactId>
     </dependency>
 
   </dependencies>
@@ -298,6 +303,9 @@
                 <JAVA_TOOL_OPTIONS>
                   -javaagent:${user.home}/.m2/repository/io/opentelemetry/javaagent/opentelemetry-javaagent/${opentelemetry.version}/opentelemetry-javaagent-${opentelemetry.version}.jar</JAVA_TOOL_OPTIONS>
                 <OTEL_JAVAAGENT_ENABLED>true</OTEL_JAVAAGENT_ENABLED>
+                <OTEL_METRICS_EXPORTER>prometheus</OTEL_METRICS_EXPORTER>
+                <OTEL_INSTRUMENTATION_MICROMETER_ENABLED>true</OTEL_INSTRUMENTATION_MICROMETER_ENABLED>
+                <OTEL_EXPORTER_PROMETHEUS_PORT>9090</OTEL_EXPORTER_PROMETHEUS_PORT>  
                 <OTEL_METRIC_EXPORT_INTERVAL>15000</OTEL_METRIC_EXPORT_INTERVAL>
                 <OTEL_EXPORTER_OTLP_TIMEOUT>10000</OTEL_EXPORTER_OTLP_TIMEOUT>
                 <OTEL_RESOURCE_ATTRIBUTES>

@@ -5,12 +5,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import demo.model.EquipementInfo;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 public class Service {
@@ -27,9 +32,17 @@ public class Service {
 
     private Map<Integer,EquipementInfo> equipementInfo = new TreeMap<Integer,EquipementInfo>();
 
+    
     @Autowired
     private ViewUpdate viewUpdate;
     
+    private AtomicLong worstFreshnessGauge;
+    private AtomicLong bestFreshnessGauge;
+    private MeterRegistry meterRegistry;
+    public Service(MeterRegistry meterRegistry) {
+        this.meterRegistry = meterRegistry;
+    }
+
     @GetMapping("/ping")
     public ResponseEntity<Serializable> ping(RequestEntity<Serializable> requestEntity) {
         logger.info(requestEntity.toString());
@@ -49,6 +62,7 @@ public class Service {
         equipementInfo.put(equipmentInfo.getId(), equipmentInfo);
         logger.info("updated : " + equipmentInfo.getId() + " " + equipmentInfo.getLastUpdate());
         viewUpdate.upsertData(equipmentInfo, "locationInfo", "state-table");
+
         return equipmentInfo;
     }
 
@@ -57,4 +71,33 @@ public class Service {
         return equipementInfo.values().stream().toList();
     }
 
+    @Scheduled(fixedRate = 5000)
+    public void updateFreshness() {
+        logger.debug("Updating freshness...");
+        long now = System.currentTimeMillis();
+        long worst = 0;
+        long best = Long.MAX_VALUE;
+        if (equipementInfo.isEmpty()) {
+            return;
+        }
+
+        for (EquipementInfo info : equipementInfo.values()) {
+            long freshness = now - info.getLastUpdate().getTime();
+            if (freshness > worst) {
+                worst = freshness;
+            }
+            if (freshness < best) {
+                best = freshness;
+            }
+        }
+
+
+        if (worstFreshnessGauge == null || bestFreshnessGauge == null) {
+            worstFreshnessGauge = meterRegistry.gauge("freshness_worst_seconds", new AtomicLong(worst/1000));
+            bestFreshnessGauge = meterRegistry.gauge("freshness_best_seconds", new AtomicLong(best/1000));
+        }else {
+            worstFreshnessGauge.set(worst/1000);
+            bestFreshnessGauge.set(best/1000);
+        }
+    }
 }
