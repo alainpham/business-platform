@@ -18,7 +18,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -82,7 +81,7 @@ public class Batches {
 	}
 
 
-    @Scheduled(fixedRate = 60000*5)
+    @Scheduled(fixedRate = 60000*2)
 	public void batchSchedule() throws IOException {
 		logger.info("The time is now {}", new Date());
 		// for (Map.Entry<Integer, EquipementInfo> entry : equipementInfoMap.entrySet()) {

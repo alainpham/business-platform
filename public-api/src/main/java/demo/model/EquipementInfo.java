@@ -14,6 +14,8 @@ public class EquipementInfo implements Serializable {
     private int numberOfSpotsAvailable;
     private int numberOfEquipmentsAvailable;
     private Date lastUpdate;
+    private long freshnessSeconds;
+
     public int getId() {
         return id;
     }
@@ -67,6 +69,12 @@ public class EquipementInfo implements Serializable {
     }
     public void setLastUpdate(Date lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+    public long getFreshnessSeconds() {
+        return freshnessSeconds;
+    }
+    public void setFreshnessSeconds(long freshnessSeconds) {
+        this.freshnessSeconds = freshnessSeconds;
     }
 
     

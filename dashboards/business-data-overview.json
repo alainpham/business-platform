@@ -31,14 +31,6 @@
       "type": "datasource",
       "pluginId": "yesoreyeram-infinity-datasource",
       "pluginName": "Infinity"
-    },
-    {
-      "name": "DS_GRAFANACLOUD-AP-TRACES",
-      "label": "grafanacloud-ap-traces",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "tempo",
-      "pluginName": "Tempo"
     }
   ],
   "__elements": {},
@@ -80,12 +72,6 @@
       "version": "1.0.0"
     },
     {
-      "type": "panel",
-      "id": "nodeGraph",
-      "name": "Node Graph",
-      "version": ""
-    },
-    {
       "type": "datasource",
       "id": "prometheus",
       "name": "Prometheus",
@@ -102,12 +88,6 @@
       "id": "table",
       "name": "Table",
       "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "tempo",
-      "name": "Tempo",
-      "version": "11.0.0"
     },
     {
       "type": "panel",
@@ -141,26 +121,6 @@
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
         "type": "dashboard"
-      },
-      {
-        "datasource": {
-          "type": "loki",
-          "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
-        },
-        "enable": true,
-        "expr": "{job=\"vcron\", status=\"Failure\"}",
-        "filter": {
-          "exclude": false,
-          "ids": [
-            11
-          ]
-        },
-        "hide": true,
-        "iconColor": "red",
-        "instant": false,
-        "name": "Erreurs Visual Cron",
-        "tagKeys": "cronjob",
-        "titleFormat": "Job failure"
       }
     ]
   },
@@ -190,7 +150,7 @@
       },
       "description": "",
       "gridPos": {
-        "h": 3,
+        "h": 2,
         "w": 10,
         "x": 0,
         "y": 1
@@ -202,7 +162,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<table style=\"width:100%; height:100%; border:2px solid gray;\">\n  <td style=\"font-size: 30px;text-align: center;vertical-align: middle;border:0px solid black;\">\nCritical Applications\n  </td>\n</table>",
+        "content": "<table style=\"width:100%; height:100%; border:2px solid gray;\">\n  <td style=\"font-size: 16px;text-align: center;vertical-align: middle;border:0px solid black;\">\nCritical Applications\n  </td>\n</table>",
         "mode": "markdown"
       },
       "pluginVersion": "11.1.0-70903",
@@ -215,7 +175,7 @@
       },
       "description": "",
       "gridPos": {
-        "h": 3,
+        "h": 2,
         "w": 14,
         "x": 10,
         "y": 1
@@ -227,7 +187,7 @@
           "showLineNumbers": false,
           "showMiniMap": false
         },
-        "content": "<table style=\"width:100%; height:100%; border:2px solid gray;\">\n  <td style=\"font-size: 30px;text-align: center;vertical-align: middle;border:0px solid black;\">\nBusiness KPIs\n  </td>\n</table>",
+        "content": "<table style=\"width:100%; height:100%; border:2px solid gray;\">\n  <td style=\"font-size: 14px;text-align: center;vertical-align: middle;border:0px solid black;\">\nBusiness KPIs\n  </td>\n</table>",
         "mode": "markdown"
       },
       "pluginVersion": "11.1.0-70903",
@@ -263,27 +223,24 @@
         "h": 3,
         "w": 10,
         "x": 0,
-        "y": 4
+        "y": 3
       },
       "id": 7,
       "links": [
         {
           "targetBlank": true,
-          "title": "Details Infrastructure",
+          "title": "Drill down to hosts",
           "url": "/d/node-fleet/linux-node-fleet-overview?orgId=1&refresh=30s&from=${__from}&to=${__to}"
         },
         {
-          "title": "Details Applications",
+          "targetBlank": true,
+          "title": "Drill down to applications",
           "url": "/a/grafana-app-observability-app/services?var-filterBy=&var-environmentValue=$__all&from=${__from}&to=${__to}"
         },
         {
           "targetBlank": true,
-          "title": "Karaf Services",
-          "url": "/d/SH3hq4ZGz/apache-camel-prometheus-jmx-exporter?orgId=1&refresh=10s&from=${__from}&to=${__to}"
-        },
-        {
-          "title": "AMQ",
-          "url": "/d/apache-activemq-instance-overview/apache-activemq-instance-overview?orgId=1&refresh=30s&from=${__from}&to=${__to}"
+          "title": "Drill down to Kubernetes",
+          "url": "/a/grafana-k8s-app/home"
         }
       ],
       "options": {
@@ -321,7 +278,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD-AP-PROM}"
       },
-      "description": "Service level indicator's value over the last 7d",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -349,10 +306,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 2,
         "x": 10,
-        "y": 4
+        "y": 3
       },
       "id": 19,
       "options": {
@@ -379,8 +336,8 @@
             "type": "prometheus",
             "uid": "${DS_GRAFANACLOUD-AP-PROM}"
           },
-          "editorMode": "builder",
-          "expr": "grafana_slo_sli_window{grafana_slo_uuid=\"alvjzc126gxz6h3v2o2ci\"}",
+          "editorMode": "code",
+          "expr": "grafana_slo_sli_window{grafana_slo_uuid=\"po4f5z1ihy8x16ehmkz6x\"}",
           "hide": false,
           "interval": "",
           "legendFormat": "__auto",
@@ -388,7 +345,7 @@
           "refId": "recorded_data"
         }
       ],
-      "title": "SLI (last 7d)",
+      "title": "SLI",
       "type": "stat"
     },
     {
@@ -396,7 +353,7 @@
         "type": "prometheus",
         "uid": "${DS_GRAFANACLOUD-AP-PROM}"
       },
-      "description": "The unspent error budget over the last {0.95 7d} Window",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -427,10 +384,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 3,
+        "h": 6,
+        "w": 2,
         "x": 12,
-        "y": 4
+        "y": 3
       },
       "id": 18,
       "options": {
@@ -459,7 +416,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "(grafana_slo_sli_window{grafana_slo_uuid=\"alvjzc126gxz6h3v2o2ci\"} - on(grafana_slo_uuid) group_left max by (grafana_slo_uuid) (grafana_slo_objective))\n\t/ on (grafana_slo_uuid) group_left max by (grafana_slo_uuid) (vector(1) - on() group_right grafana_slo_objective{grafana_slo_uuid=\"alvjzc126gxz6h3v2o2ci\"})",
+          "expr": "(grafana_slo_sli_window{grafana_slo_uuid=\"po4f5z1ihy8x16ehmkz6x\"} - on(grafana_slo_uuid) group_left max by (grafana_slo_uuid) (grafana_slo_objective))\n\t/ on (grafana_slo_uuid) group_left max by (grafana_slo_uuid) (vector(1) - on() group_right grafana_slo_objective{grafana_slo_uuid=\"po4f5z1ihy8x16ehmkz6x\"})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -468,7 +425,7 @@
           "refId": "A"
         }
       ],
-      "title": "Error budget on data freshness",
+      "title": "Error budget",
       "type": "stat"
     },
     {
@@ -517,10 +474,10 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 3,
-        "x": 15,
-        "y": 4
+        "x": 14,
+        "y": 3
       },
       "id": 5,
       "options": {
@@ -624,9 +581,9 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 6,
-        "x": 18,
-        "y": 4
+        "w": 7,
+        "x": 17,
+        "y": 3
       },
       "id": 9,
       "options": {
@@ -792,7 +749,7 @@
         "h": 6,
         "w": 7,
         "x": 0,
-        "y": 7
+        "y": 6
       },
       "id": 11,
       "options": {
@@ -815,7 +772,7 @@
             "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=started` [1m]))",
+          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=started` [110s]))",
           "legendFormat": "started",
           "queryType": "range",
           "refId": "started"
@@ -826,7 +783,7 @@
             "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=completed` [1m]))",
+          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=completed` [110s]))",
           "legendFormat": "success",
           "queryType": "range",
           "refId": "success"
@@ -837,7 +794,7 @@
             "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
           },
           "editorMode": "code",
-          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=failed` [1m]))",
+          "expr": "sum(count_over_time({service_name=\"business-platform/data-batcher\"} |= `state=failed` [110s]))",
           "legendFormat": "failed",
           "queryType": "range",
           "refId": "failed"
@@ -883,7 +840,7 @@
         "h": 6,
         "w": 3,
         "x": 7,
-        "y": 7
+        "y": 6
       },
       "id": 16,
       "options": {
@@ -925,8 +882,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "red",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "custom": {
             "hideFrom": {
@@ -940,28 +896,48 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 40
+              },
+              {
+                "color": "red",
+                "value": 120
               }
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "lastUpdate"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "dateTimeFromNow"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 13,
+        "h": 12,
         "w": 8,
         "x": 10,
         "y": 9
       },
-      "id": 15,
+      "id": 4,
       "options": {
         "basemap": {
           "config": {
             "server": "streets"
           },
           "name": "Layer 0",
-          "opacity": 1,
           "type": "esri-xyz"
         },
         "controls": {
@@ -978,7 +954,8 @@
               "showLegend": true,
               "style": {
                 "color": {
-                  "fixed": "red"
+                  "field": "freshnessSeconds",
+                  "fixed": "dark-green"
                 },
                 "opacity": 0.7,
                 "rotation": {
@@ -988,7 +965,7 @@
                   "mode": "mod"
                 },
                 "size": {
-                  "fixed": 10,
+                  "fixed": 5,
                   "max": 15,
                   "min": 2
                 },
@@ -1000,26 +977,19 @@
                   "horizontal": "center",
                   "vertical": "center"
                 },
-                "text": {
-                  "field": "nom",
-                  "fixed": "",
-                  "mode": "fixed"
-                },
                 "textConfig": {
                   "fontSize": 12,
-                  "offsetX": 10,
+                  "offsetX": 0,
                   "offsetY": 0,
-                  "textAlign": "left",
-                  "textBaseline": "top"
+                  "textAlign": "center",
+                  "textBaseline": "middle"
                 }
               }
             },
             "location": {
-              "latitude": "lat",
-              "longitude": "lon",
-              "mode": "coords"
+              "mode": "auto"
             },
-            "name": "Out of order equipment",
+            "name": "freshness",
             "tooltip": true,
             "type": "markers"
           }
@@ -1031,10 +1001,9 @@
           "allLayers": false,
           "id": "fit",
           "lastOnly": false,
-          "lat": 46,
-          "layer": "Out of order equipment",
-          "lon": 14,
-          "padding": 15,
+          "lat": 0,
+          "layer": "freshness",
+          "lon": 0,
           "zoom": 15
         }
       },
@@ -1042,23 +1011,19 @@
       "targets": [
         {
           "columns": [],
-          "computed_columns": [],
           "datasource": {
             "type": "yesoreyeram-infinity-datasource",
             "uid": "${DS_YESOREYERAM-INFINITY-DATASOURCE}"
           },
-          "filterExpression": "status == \"DÉCONNECTÉ\"",
+          "filterExpression": "status ==\"CONNECTÉ\"",
           "filters": [],
           "format": "table",
           "global_query_id": "odata",
-          "groq": "*",
           "parser": "backend",
           "refId": "A",
-          "referenceName": "open-api",
           "root_selector": "",
           "source": "url",
           "type": "json",
-          "uql": "parse-json",
           "url": "https://public-api.gkube.duckdns.org/getAll",
           "url_options": {
             "data": "",
@@ -1066,7 +1031,36 @@
           }
         }
       ],
-      "title": "Out of order equipment",
+      "title": "Last Updated",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "address": false,
+              "id": true,
+              "lat": false,
+              "lon": false,
+              "numberOfEquipmentsAvailable": true,
+              "numberOfSpotsAvailable": true,
+              "status": true
+            },
+            "includeByName": {},
+            "indexByName": {
+              "address": 0,
+              "id": 1,
+              "lastUpdate": 5,
+              "lat": 2,
+              "lon": 3,
+              "name": 4,
+              "numberOfEquipmentsAvailable": 6,
+              "numberOfSpotsAvailable": 7,
+              "status": 8
+            },
+            "renameByName": {}
+          }
+        }
+      ],
       "type": "geomap"
     },
     {
@@ -1096,11 +1090,11 @@
               },
               {
                 "color": "#EAB839",
-                "value": 180000
+                "value": 40
               },
               {
                 "color": "red",
-                "value": 7200000
+                "value": 120
               }
             ]
           }
@@ -1109,12 +1103,18 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "lastUpdate"
+              "options": "freshnessSeconds"
             },
             "properties": [
               {
                 "id": "unit",
-                "value": "dateTimeFromNow"
+                "value": "dtdurations"
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-background"
+                }
               }
             ]
           }
@@ -1124,9 +1124,9 @@
         "h": 12,
         "w": 6,
         "x": 18,
-        "y": 10
+        "y": 9
       },
-      "id": 4,
+      "id": 20,
       "options": {
         "cellHeight": "sm",
         "footer": {
@@ -1177,6 +1177,7 @@
             "excludeByName": {
               "address": true,
               "id": true,
+              "lastUpdate": true,
               "lat": true,
               "lon": true,
               "numberOfEquipmentsAvailable": true,
@@ -1195,7 +1196,9 @@
               "numberOfSpotsAvailable": 7,
               "status": 8
             },
-            "renameByName": {}
+            "renameByName": {
+              "freshnessSeconds": "freshness"
+            }
           }
         },
         {
@@ -1335,7 +1338,7 @@
         "h": 9,
         "w": 10,
         "x": 0,
-        "y": 13
+        "y": 12
       },
       "id": 17,
       "options": {
@@ -1515,6 +1518,19 @@
       "type": "table"
     },
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 13,
+      "panels": [],
+      "title": "Detailed View",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "loki",
         "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
@@ -1542,78 +1558,44 @@
             "type": "loki",
             "uid": "${DS_GRAFANACLOUD-AP-LOGS}"
           },
-          "editorMode": "builder",
-          "expr": "{job=\"vcron\", cronjob=~\".+\"} |= ``",
+          "editorMode": "code",
+          "expr": "{service_name=\"business-platform/data-batcher\"} |= `batchprocess` |= `$logfilter` | json | line_format `{{.body}}` | logfmt | keep batchprocess, id, state, duration",
           "queryType": "range",
           "refId": "A"
         }
       ],
-      "title": "Derniers Logs VCron",
+      "title": "Last Logs",
       "type": "logs"
-    },
-    {
-      "collapsed": false,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 30
-      },
-      "id": 13,
-      "panels": [],
-      "title": "Detailed View",
-      "type": "row"
-    },
-    {
-      "datasource": {
-        "type": "tempo",
-        "uid": "${DS_GRAFANACLOUD-AP-TRACES}"
-      },
-      "gridPos": {
-        "h": 17,
-        "w": 11,
-        "x": 0,
-        "y": 31
-      },
-      "id": 10,
-      "links": [
-        {
-          "title": "Monitoring Applicatif",
-          "url": "/a/grafana-app-observability-app/services"
-        }
-      ],
-      "options": {
-        "edges": {},
-        "nodes": {
-          "arcs": []
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "tempo",
-            "uid": "${DS_GRAFANACLOUD-AP-TRACES}"
-          },
-          "limit": 20,
-          "query": "",
-          "queryType": "serviceMap",
-          "refId": "A",
-          "serviceMapQuery": "{}",
-          "tableType": "traces"
-        }
-      ],
-      "title": "Service Mesh",
-      "type": "nodeGraph"
     }
   ],
   "refresh": "",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "hide": 0,
+        "name": "logfilter",
+        "options": [
+          {
+            "selected": true,
+            "text": "",
+            "value": ""
+          }
+        ],
+        "query": "",
+        "skipUrlSync": false,
+        "type": "textbox"
+      }
+    ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-15m",
     "to": "now"
   },
   "timeRangeUpdatedDuringEditOrView": false,
@@ -1621,6 +1603,6 @@
   "timezone": "browser",
   "title": "business-data-overview",
   "uid": "business-data-overview",
-  "version": 23,
+  "version": 41,
   "weekStart": ""
 }

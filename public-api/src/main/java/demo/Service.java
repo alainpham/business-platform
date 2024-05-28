@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.slf4j.Logger;
@@ -22,23 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 import demo.model.EquipementInfo;
-import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.MultiGauge;
 
 @RestController
 public class Service {
 
     private final static Logger logger = LoggerFactory.getLogger(Service.class);
 
-    private Map<Integer,EquipementInfo> equipementInfo = new TreeMap<Integer,EquipementInfo>();
+    private Map<Integer, EquipementInfo> equipementInfo = new TreeMap<Integer, EquipementInfo>();
 
-    
     @Autowired
     private ViewUpdate viewUpdate;
-    
+
     private AtomicLong worstFreshnessGauge;
     private AtomicLong bestFreshnessGauge;
+    
     private MeterRegistry meterRegistry;
+
     public Service(MeterRegistry meterRegistry) {
         this.meterRegistry = meterRegistry;
     }
@@ -46,11 +47,12 @@ public class Service {
     @GetMapping("/ping")
     public ResponseEntity<Serializable> ping(RequestEntity<Serializable> requestEntity) {
         logger.info(requestEntity.toString());
-        return ResponseEntity.status(200).body(new LinkedHashMap<String,Serializable>(Map.of("msg", "HELLO")));
+        return ResponseEntity.status(200).body(new LinkedHashMap<String, Serializable>(Map.of("msg", "HELLO")));
     }
 
     @PostMapping("/send-msg")
-    public ResponseEntity<Serializable> sendMsg(RequestEntity<Serializable> requestEntity) throws JsonProcessingException {
+    public ResponseEntity<Serializable> sendMsg(RequestEntity<Serializable> requestEntity)
+            throws JsonProcessingException {
         logger.info(requestEntity.getBody().toString());
         viewUpdate.upsertData(requestEntity.getBody(), "person", "state-table");
         viewUpdate.appendData(requestEntity.getBody(), "person", "log-table");
@@ -68,15 +70,18 @@ public class Service {
 
     @GetMapping("/getAll")
     public List<EquipementInfo> getAll() {
+        long now = System.currentTimeMillis();
+        equipementInfo.values().forEach(info -> info.setFreshnessSeconds((now - info.getLastUpdate().getTime()) / 1000));
         return equipementInfo.values().stream().toList();
     }
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 3000)
     public void updateFreshness() {
         logger.debug("Updating freshness...");
         long now = System.currentTimeMillis();
         long worst = 0;
         long best = Long.MAX_VALUE;
+
         if (equipementInfo.isEmpty()) {
             return;
         }
@@ -91,13 +96,12 @@ public class Service {
             }
         }
 
-
         if (worstFreshnessGauge == null || bestFreshnessGauge == null) {
-            worstFreshnessGauge = meterRegistry.gauge("freshness_worst_seconds", new AtomicLong(worst/1000));
-            bestFreshnessGauge = meterRegistry.gauge("freshness_best_seconds", new AtomicLong(best/1000));
-        }else {
-            worstFreshnessGauge.set(worst/1000);
-            bestFreshnessGauge.set(best/1000);
+            worstFreshnessGauge = meterRegistry.gauge("freshness_worst_seconds", new AtomicLong(worst / 1000));
+            bestFreshnessGauge = meterRegistry.gauge("freshness_best_seconds", new AtomicLong(best / 1000));
+        } else {
+            worstFreshnessGauge.set(worst / 1000);
+            bestFreshnessGauge.set(best / 1000);
         }
     }
 }
