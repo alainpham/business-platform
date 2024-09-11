@@ -6,8 +6,8 @@
   - [Deploy kube using maven](#deploy-kube-using-maven)
   - [run the demo with docker](#run-the-demo-with-docker)
     - [Optionally create a dedicated network](#optionally-create-a-dedicated-network)
-    - [Launch broker](#launch-broker)
     - [Launch apps](#launch-apps)
+    - [Stop All](#stop-all)
     - [Install and launch Grafana Alloy on Linux Host](#install-and-launch-grafana-alloy-on-linux-host)
   - [run demo on kubernetes](#run-demo-on-kubernetes)
     - [Generate a domain name and wildcard certificates with Letsencrypt](#generate-a-domain-name-and-wildcard-certificates-with-letsencrypt)
@@ -38,7 +38,7 @@ export MAIN_PROJECT_VERSION=$(mvn help:evaluate -Dexpression=project.version -q 
 export OTLP_ENDPOINT=$(mvn help:evaluate -Dexpression=otlp.endpoint -q -DforceStdout)
 export ACTIVEMQ_ARTEMIS_VERSION=2.33.0
 export OTELCOL_VERSION=0.96.0
-export K6_VERSION=0.50.0
+export K6_VERSION=0.52.0
 export KUBE_INGRESS_ROOT_DOMAIN=gkube.duckdns.org
 
 
@@ -89,8 +89,24 @@ mvn package exec:exec@buildpush -f data-batcher/pom.xml
 ## Deploy kube using maven
 
 ```bash
+kubectl delete namespace business-platform
 kubectl create ns business-platform
 kubectl config set-context --current --namespace=business-platform
+```
+
+```bash
+export CONTAINER_REGISTRY=apache
+export PROJECT_ARTIFACTID=activemq-artemis
+export PROJECT_VERSION=${ACTIVEMQ_ARTEMIS_VERSION}
+
+wget -O /tmp/broker.yaml https://raw.githubusercontent.com/alainpham/business-platform/master/broker/broker.envsubst.yaml
+envsubst < /tmp/broker.yaml | kubectl apply -n business-platform -f -
+
+envsubst < /tmp/broker.yaml | kubectl delete -n business-platform -f -
+```
+
+```bash
+
 
 mvn exec:exec@kdeploy -f business-hub/pom.xml
 mvn exec:exec@kdeploy -f availability-service/pom.xml
@@ -112,6 +128,19 @@ mvn exec:exec@kdelete  exec:exec@kdeploy -f public-api/pom.xml
 mvn exec:exec@kdelete  exec:exec@kdeploy -f data-batcher/pom.xml
 ```
 
+Create data source for grafana test data
+
+Create datasource for infinity plugin
+
+Add dashboard on Grafana Cloud
+
+Create an SLO with the following formula
+
+```
+sum by (job) (last_over_time(freshness_worst_seconds[$__interval])) < bool 120
+```
+
+
 ## run the demo with docker
 
 ### Optionally create a dedicated network
@@ -120,46 +149,57 @@ mvn exec:exec@kdelete  exec:exec@kdeploy -f data-batcher/pom.xml
 docker network create --driver=bridge --subnet=172.19.0.0/16 --gateway=172.19.0.1 mainnet
 ```
 
-### Launch broker
-
-```bash
-docker run --rm -d --net mainnet \
-    -e ANONYMOUS_LOGIN=true \
-    --name activemq-artemis -p 61616:61616 -p 8161:8161 apache/activemq-artemis:${ACTIVEMQ_ARTEMIS_VERSION}
-  
-docker stop activemq-artemis
-```
-
 ### Launch apps
 
 ```bash
-export PROJECT_VERSION=${MAIN_PROJECT_VERSION}
+
+docker run --rm -d --net mainnet \
+    -e ANONYMOUS_LOGIN=true \
+    --name activemq-artemis -p 61616:61616 -p 8161:8161 apache/activemq-artemis:${ACTIVEMQ_ARTEMIS_VERSION}
 
 docker run --rm -d --net mainnet \
     -p 8080:8080 \
     -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name business-hub alainpham/business-hub:${PROJECT_VERSION}
+    --name business-hub alainpham/business-hub:${MAIN_PROJECT_VERSION}
     
 docker run --rm -d --net mainnet \
     -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name availability-service alainpham/availability-service:${PROJECT_VERSION}
+    -e APP_PROCESSING_CPUUSAGE_PERCENTAGE=1 \
+    -e APP.PROCESSING.MEMUSAGE_MB=1 \
+    --name availability-service alainpham/availability-service:${MAIN_PROJECT_VERSION}
     
 docker run --rm -d --net mainnet \
     -e OTEL_JAVAAGENT_ENABLED="true" \
-    --name notification-service alainpham/notification-service:${PROJECT_VERSION}
+    --name notification-service alainpham/notification-service:${MAIN_PROJECT_VERSION}
 
 docker run --rm -d --net mainnet \
     -e OTEL_JAVAAGENT_ENABLED="true" \
     -e APP_QUEUE="email" \
     -e OTEL_RESOURCE_ATTRIBUTES=service.name=email,service.namespace=email-ns,service.instance.id=email-cnt,service.version=${PROJECT_VERSION} \
-    --name email alainpham/message-consumer:${PROJECT_VERSION}
+    --name email alainpham/message-consumer:${MAIN_PROJECT_VERSION}
 
 docker run --rm -d --net mainnet \
     -e OTEL_JAVAAGENT_ENABLED="true" \
     -e APP_QUEUE="sms" \
     -e OTEL_RESOURCE_ATTRIBUTES=service.name=sms,service.namespace=sms-ns,service.instance.id=sms-cnt,service.version=${PROJECT_VERSION} \
-    --name sms alainpham/message-consumer:${PROJECT_VERSION}
+    --name sms alainpham/message-consumer:${MAIN_PROJECT_VERSION}
+
+docker run --rm -d --net mainnet \
+    --entrypoint /bin/sh \
+    -e BASE_URL="http://business-hub:8080" \
+    -v "./k6/script.js:/scripts/script.js:ro" \
+    --name k6 grafana/k6:${K6_VERSION} \
+    -c "while true; do k6 run /scripts/script.js ;sleep 2m; done"
+
 ```
+
+### Stop All
+
+```bash 
+docker stop k6 business-hub availability-service notification-service email sms activemq-artemis
+
+```
+
 
 ### Install and launch Grafana Alloy on Linux Host
 
@@ -194,7 +234,7 @@ docker run -v "$(pwd)/sensitive/letsencrypt/data:/etc/letsencrypt" -v "$(pwd)/se
      --preferred-challenges dns \
      --authenticator dns-duckdns \
      --dns-duckdns-token ${DUCKDNS_TOKEN} \
-     --dns-duckdns-propagation-seconds 15 \
+     --dns-duckdns-propagation-seconds 30 \
      -d "*.${WILDCARD_DOMAIN}"
 
 sudo chown -R ${USER}:${USER} $(pwd)/sensitive/letsencrypt/data

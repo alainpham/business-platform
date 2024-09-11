@@ -7,9 +7,9 @@ const BASE_URL = __ENV.BASE_URL || 'http://demovm.duckdns.org:8080';
 // Define the options for your test
 export let options = {
     stages: [
-        { duration: '30s', target: 20 }, // Ramp up to 50 virtual users over 1 minute
-        { duration: '4m', target: 50 }, // Stay at 50 virtual users for 3 minutes
-        { duration: '30s', target: 0 }   // Ramp down to 0 virtual users over 1 minute
+        { duration: '30s', target: 20 }, // Ramp up to 50 virtual users over 0.5 minute
+        { duration: '6m', target: 50 }, // Stay at 50 virtual users for 6 minutes
+        { duration: '30s', target: 0 }   // Ramp down to 0 virtual users over 0.5 minute
     ],
 };
 

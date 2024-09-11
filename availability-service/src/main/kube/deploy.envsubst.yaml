@@ -52,8 +52,8 @@ stringData:
     app.processing.exectimeavg.ms=30
     app.processing.exectimestdev.ms=15
 
-    app.processing.cpuusage.percentage=90
-    app.processing.memusage.mb=100
+    app.processing.cpuusage.percentage=20
+    app.processing.memusage.mb=1
 
 ---
 
@@ -128,6 +128,10 @@ spec:
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES
             value: "service.name=${PROJECT_ARTIFACTID},service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=${PROJECT_VERSION}"
+          - name: APP_PROCESSING_CPUUSAGE_PERCENTAGE
+            value: "20"
+          - name: APP_PROCESSING_MEMUSAGE_MB
+            value: "1"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -147,12 +151,12 @@ spec:
           periodSeconds: 10
           failureThreshold: 40 
         resources:
-          # limits:
-          #   cpu: "1.0"
-          #   memory: "1024Mi"
-          # requests:
-          #   cpu: "0.2"
-          #   memory: "128Mi"
+          limits:
+            cpu: "2"
+            memory: "2048Mi"
+          requests:
+            cpu: "0.5"
+            memory: "512Mi"
         ports:
           - containerPort: 8080
           - containerPort: 8081
