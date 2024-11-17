@@ -146,12 +146,14 @@ sum by (job) (last_over_time(freshness_worst_seconds[$__interval])) < bool 120
 ### Optionally create a dedicated network
 
 ```bash
-docker network create --driver=bridge --subnet=172.19.0.0/16 --gateway=172.19.0.1 mainnet
+docker network create --driver=bridge --subnet=172.20.0.0/16 --gateway=172.20.0.1 mainnet
 ```
 
 ### Launch apps
 
 ```bash
+
+
 
 docker run --rm -d --net mainnet \
     -e ANONYMOUS_LOGIN=true \
