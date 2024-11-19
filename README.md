@@ -13,6 +13,7 @@
     - [Generate a domain name and wildcard certificates with Letsencrypt](#generate-a-domain-name-and-wildcard-certificates-with-letsencrypt)
     - [Create ingress router](#create-ingress-router)
     - [Deploy OTEL Collector sending data to Grafana Cloud (option 1)](#deploy-otel-collector-sending-data-to-grafana-cloud-option-1)
+    - [Deploy PDC agent](#deploy-pdc-agent)
     - [Deploy Grafana Alloy to send data to Grafana Cloud (option 2)](#deploy-grafana-alloy-to-send-data-to-grafana-cloud-option-2)
     - [start from scratch](#start-from-scratch)
     - [broker](#broker)
@@ -271,6 +272,14 @@ kubectl create ns agents
 
 wget -O /tmp/otelcol.yaml https://raw.githubusercontent.com/alainpham/business-platform/master/otelcol/otelcol.yaml
 envsubst < /tmp/otelcol.yaml | kubectl -n agents apply -f -
+
+```
+
+### Deploy PDC agent
+```bash
+wget -O /tmp/pdc.yaml https://raw.githubusercontent.com/alainpham/business-platform/master/pdc/pdc.yaml
+kubectl -n agents apply -f pdc/pdc.yaml
+
 ```
 
 ### Deploy Grafana Alloy to send data to Grafana Cloud (option 2)

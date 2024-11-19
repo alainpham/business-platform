@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            text-align: center;
+        }
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Subscribe</h1>
+    <form id="subscribeForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" placeholder="Enter your email" required />
+        <button type="submit">Subscribe</button>
+    </form>
+    <div class="message" id="message"></div>
+
+    <script>
+        document.getElementById("subscribeForm").addEventListener("submit", async (event) => {
+            event.preventDefault(); // Prevent form submission reload
+
+            const email = document.getElementById("email").value;
+
+            try {
+                const response = await fetch("/subscribe", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email }),
+                });
+
+                const data = await response.json();
+
+                const messageDiv = document.getElementById("message");
+                if (response.ok) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.color = "green";
+                } else {
+                    messageDiv.textContent = data.message || "Subscription failed.";
+                    messageDiv.style.color = "red";
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById("message").textContent =
+                    "An error occurred. Please try again.";
+            }
+        });
+    </script>
+<script>
+    (function () {
+      var webSdkScript = document.createElement("script");
+  
+      // fetch the latest version of the Web-SDK from the CDN
+      webSdkScript.src =
+        "https://unpkg.com/@grafana/faro-web-sdk@^1.4.0/dist/bundle/faro-web-sdk.iife.js";
+  
+      webSdkScript.onload = () => {
+        window.GrafanaFaroWebSdk.initializeFaro({
+          url: "https://faro-collector-prod-eu-west-2.grafana.net/collect/ac6baf0b202db34222f8ab5ec3c41457",
+          app: {
+            name: "video-streaming-app",
+            version: "1.0.0",
+            environment: "production",
+          },
+            metas: [
+                () => ({
+                    page: {
+                        id: location.pathname,
+                        url: location.href,
+                        attributes: {
+                            foo: 'bar',
+                        },
+                    },
+                }),
+            ],
+        });
+  
+  
+        // Load instrumentations at the onLoad event of the web-SDK and after the above configuration.
+        // This is important because we need to ensure that the Web-SDK has been loaded and initialized before we add further instruments!
+        var webTracingScript = document.createElement("script");
+  
+        // fetch the latest version of the Web Tracing package from the CDN
+        webTracingScript.src =
+          "https://unpkg.com/@grafana/faro-web-tracing@^1.4.0/dist/bundle/faro-web-tracing.iife.js";
+  
+        // Initialize, configure (if necessary) and add the the new instrumentation to the already loaded and configured Web-SDK.
+        webTracingScript.onload = () => {
+          window.GrafanaFaroWebSdk.faro.instrumentations.add(
+            new window.GrafanaFaroWebTracing.TracingInstrumentation()
+          );
+        };
+  
+        // Append the Web Tracing script script tag to the HTML page
+        document.head.appendChild(webTracingScript);
+      };
+  
+      // Append the Web-SDK script script tag to the HTML page
+      document.head.appendChild(webSdkScript);
+    })();
+  </script>
+  
+</body>
+</html>
