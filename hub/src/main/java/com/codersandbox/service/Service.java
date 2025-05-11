@@ -28,7 +28,8 @@ public class Service {
     private final static Logger logger = LoggerFactory.getLogger(Service.class);
 
     private static final String AVAILABILITY_CALCULATOR_URL = System.getenv().getOrDefault("AVAILABILITY_CALCULATOR_URL", "http://availability-calculator:8080");
-    
+    private static final String NOTIFICATION_DISPATCHER_URL = System.getenv().getOrDefault("NOTIFICATION_DISPATCHER_URL", "http://notification-dispatcher:8080");
+
     private RestTemplate restTemplate = new RestTemplate();
 
 
@@ -76,7 +77,9 @@ public class Service {
         logger.info("Received availability response: {}", availResponse);
         
         if (availResponse.get("status").equals("available")) {
-            logger.info("Booking is available, sending notifications...");
+            logger.info("Booking is available, calling notifications dispatch ...");
+            Map<String, Object> dispatchResponse = restTemplate.postForObject(NOTIFICATION_DISPATCHER_URL + "/dispatch-notification",booking, Map.class);
+            logger.info("dispatched notification: {}", dispatchResponse);
         }
 
         return ResponseEntity.status(201).body(availResponse);
