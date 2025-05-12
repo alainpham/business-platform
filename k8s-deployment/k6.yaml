@@ -107,13 +107,13 @@ spec:
       template:
         spec:
           containers:
-          - name: ${PROJECT_ARTIFACTID}
-            image: "${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}"
+          - name: k6
+            image: "grafana/k6:1.0.0-with-browser"
             args: ["run", "/scripts/script.js"]
             imagePullPolicy: IfNotPresent
             env:
               - name: BASE_URL
-                value: ${BASE_URL}
+                value: http://hub:8080
             volumeMounts:
             - name: k6-config
               mountPath: /scripts/
