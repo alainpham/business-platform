@@ -7,9 +7,10 @@ const BASE_URL = __ENV.BASE_URL || 'http://hub:8080';
 // Define the options for your test
 export let options = {
     stages: [
-        { duration: '5s', target: 2 }, 
-        { duration: '30s', target: 4 }, 
-        { duration: '5s', target: 1 }   
+        { duration: '30s', target: 2 }, 
+        { duration: '2m', target: 6 },
+        { duration: '30s', target: 3 }, 
+        { duration: '2m', target: 0 }   
     ],
 };
 

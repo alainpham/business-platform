@@ -4,11 +4,11 @@
   - [build services and run using docker](#build-services-and-run-using-docker)
     - [build docker locally](#build-docker-locally)
     - [run local container in background with otel](#run-local-container-in-background-with-otel)
-    - [build and run local with otel for testing](#build-and-run-local-with-otel-for-testing)
-  - [build and push to dockerhub](#build-and-push-to-dockerhub)
-  - [build and run k6/cron image](#build-and-run-k6cron-image)
-    - [build with docker](#build-with-docker)
     - [run k6 test](#run-k6-test)
+    - [stop everything](#stop-everything)
+    - [build and run local with otel for testing](#build-and-run-local-with-otel-for-testing)
+  - [build and push to dockerhub in multi arch](#build-and-push-to-dockerhub-in-multi-arch)
+  - [remove all images](#remove-all-images)
 
 # business platform demo
 
@@ -23,42 +23,20 @@ This is a guide to deploy a set of synchronous and asynchronous microservices in
 ### build docker locally
 ```bash
 mvn install
+mvn clean package exec:exec@rmi exec:exec@build -f hub/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build -f availability-calculator/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build -f notification-dispatcher/pom.xml
-mvn clean package exec:exec@rmi exec:exec@build -f hub/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build -f sms/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build -f email/pom.xml
 ```
 
 ### run local container in background with otel
 ```bash
+mvn exec:exec@runoteld -f hub/pom.xml
 mvn exec:exec@runoteld -f availability-calculator/pom.xml
 mvn exec:exec@runoteld -f notification-dispatcher/pom.xml
-mvn exec:exec@runoteld -f hub/pom.xml
-```
-
-### build and run local with otel for testing
-```bash
-mvn install
-mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f availability-calculator/pom.xml
-mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f hub/pom.xml
-
-```
-
-## build and push to dockerhub
-
-```bash
-mvn install
-mvn clean package exec:exec@buildpush -f availability-calculator/pom.xml
-mvn clean package exec:exec@buildpush -f hub/pom.xml
-```
-
-## build and run k6/cron image
-
-### build with docker
-```bash
-docker rmi alainpham/k6cron:latest
-docker build -t alainpham/k6cron:latest -f k6/Dockerfile k6
-
-docker push alainpham/k6cron:latest
+mvn exec:exec@runoteld -f sms/pom.xml
+mvn exec:exec@runoteld -f email/pom.xml
 ```
 
 ### run k6 test
@@ -72,3 +50,40 @@ docker run -d --rm \
   grafana/k6:1.0.0-with-browser \
   /home/k6/loop.sh
 ```
+
+### stop everything
+```bash
+docker stop hub availability-calculator notification-dispatcher sms email k6
+```
+
+### build and run local with otel for testing
+```bash
+mvn install
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f hub/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f availability-calculator/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f notification-dispatcher/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f sms/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f email/pom.xml
+```
+
+## build and push to dockerhub in multi arch
+
+```bash
+mvn install
+mvn clean package exec:exec@buildpush -f hub/pom.xml
+mvn clean package exec:exec@buildpush -f availability-calculator/pom.xml
+mvn clean package exec:exec@buildpush -f notification-dispatcher/pom.xml
+mvn clean package exec:exec@buildpush -f sms/pom.xml
+mvn clean package exec:exec@buildpush -f email/pom.xml
+```
+
+## remove all images
+
+```bash
+mvn clean exec:exec@rmi -f hub/pom.xml
+mvn clean exec:exec@rmi -f availability-calculator/pom.xml
+mvn clean exec:exec@rmi -f notification-dispatcher/pom.xml
+mvn clean exec:exec@rmi -f sms/pom.xml
+mvn clean exec:exec@rmi -f email/pom.xml
+```
+
