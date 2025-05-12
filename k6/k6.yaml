@@ -11,14 +11,15 @@ stringData:
     import { check, sleep } from 'k6';
 
     // Define the base URL of your API
-    const BASE_URL = __ENV.BASE_URL;
+    const BASE_URL = __ENV.BASE_URL || 'http://hub:8080';
 
     // Define the options for your test
     export let options = {
         stages: [
-            { duration: '30s', target: 5 }, // Ramp up to 50 virtual users over 1 minute
-            { duration: '4m', target: 10 }, // Stay at 50 virtual users for 3 minutes
-            { duration: '30s', target: 0 }   // Ramp down to 0 virtual users over 1 minute
+            { duration: '30s', target: 2 }, 
+            { duration: '1m', target: 6 },
+            { duration: '30s', target: 3 }, 
+            { duration: '2m', target: 0 }   
         ],
     };
 
@@ -43,7 +44,7 @@ stringData:
         response = http.post(`${BASE_URL}/book`, JSON.stringify(body), { headers: headers });
 
         check(response, {
-            'Status 200': (r) => r.status === 200,
+            'Status 201': (r) => r.status === 201,
         });
 
         sleep(1);
@@ -64,7 +65,7 @@ stringData:
         response = http.post(`${BASE_URL}/book`, JSON.stringify(body), { headers: headers });
 
         check(response, {
-            'Status 200': (r) => r.status === 200,
+            'Status 201': (r) => r.status === 201,
         });
 
         sleep(1);
@@ -85,7 +86,7 @@ stringData:
         response = http.post(`${BASE_URL}/book`, JSON.stringify(body), { headers: headers });
 
         check(response, {
-            'Status 200': (r) => r.status === 200,
+            'Status 201': (r) => r.status === 201,
         });
 
         sleep(1);
@@ -100,19 +101,19 @@ metadata:
     app: k6
   name: k6-job
 spec:
-  schedule: "*/7 * * * *"
+  schedule: "*/5 * * * *"
   jobTemplate:
     spec:
       template:
         spec:
           containers:
-          - name: ${PROJECT_ARTIFACTID}
-            image: "${CONTAINER_REGISTRY}/${PROJECT_ARTIFACTID}:${PROJECT_VERSION}"
+          - name: k6
+            image: "grafana/k6:1.0.0-with-browser"
             args: ["run", "/scripts/script.js"]
             imagePullPolicy: IfNotPresent
             env:
               - name: BASE_URL
-                value: ${BASE_URL}
+                value: http://hub:8080
             volumeMounts:
             - name: k6-config
               mountPath: /scripts/

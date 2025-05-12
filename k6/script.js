@@ -8,9 +8,9 @@ const BASE_URL = __ENV.BASE_URL || 'http://hub:8080';
 export let options = {
     stages: [
         { duration: '30s', target: 2 }, 
-        { duration: '2m', target: 6 },
+        { duration: '1m', target: 6 },
         { duration: '30s', target: 3 }, 
-        { duration: '2m', target: 0 }   
+        { duration: '3m', target: 0 }   
     ],
 };
 

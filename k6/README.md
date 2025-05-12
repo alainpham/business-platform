@@ -1,5 +1,3 @@
-
-
-```bash
-docker run --entrypoint /home/k6/loop
-```
+export CONTAINER_REGISTRY=grafana
+export PROJECT_ARTIFACTID=k6
+export PROJECT_VERSION=1.0.0
