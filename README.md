@@ -9,6 +9,8 @@
     - [build and run local with otel for testing](#build-and-run-local-with-otel-for-testing)
   - [build and push to dockerhub in multi arch](#build-and-push-to-dockerhub-in-multi-arch)
   - [remove all images](#remove-all-images)
+  - [k8s deployment](#k8s-deployment)
+  - [generate k8s deployment yaml](#generate-k8s-deployment-yaml)
 
 # business platform demo
 
@@ -87,3 +89,21 @@ mvn clean exec:exec@rmi -f sms/pom.xml
 mvn clean exec:exec@rmi -f email/pom.xml
 ```
 
+## k8s deployment
+
+```bash
+
+
+```
+
+## generate k8s deployment yaml
+
+```bash
+mvn exec:exec@kyml -f hub/pom.xml
+mvn exec:exec@kyml -f availability-calculator/pom.xml
+mvn exec:exec@kyml -f notification-dispatcher/pom.xml
+mvn exec:exec@kyml -f sms/pom.xml
+mvn exec:exec@kyml -f email/pom.xml
+
+cp **/target/*-deploy.yaml ./k8s-deployment
+```
