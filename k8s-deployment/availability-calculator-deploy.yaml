@@ -103,7 +103,7 @@ spec:
           - name: APPLICATION_NAME
             value: availability-calculator
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
-            value: "http://grafana-k8s-monitoring-alloy.default.svc.cluster.local:4318"
+            http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318
           - name: OTEL_JAVAAGENT_ENABLED
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES

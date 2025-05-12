@@ -24,7 +24,7 @@
     <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
     <exec-maven-plugin.version>3.5.0</exec-maven-plugin.version>
     <container.registry>alainpham</container.registry>
-    <kube.otlp.endpoint>http://grafana-k8s-monitoring-alloy.agents.svc.cluster.local:4318</kube.otlp.endpoint>
+    <kube.otlp.endpoint>http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318</kube.otlp.endpoint>
     <kube.ingress.root.domain>v8s.duckdns.org</kube.ingress.root.domain>
     <docker.network>primenet</docker.network>
     <docker.root.domain>zez.duckdns.org</docker.root.domain>
