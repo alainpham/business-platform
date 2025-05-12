@@ -92,8 +92,11 @@ mvn clean exec:exec@rmi -f email/pom.xml
 ## k8s deployment
 
 ```bash
-
-
+kubectl apply -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/hub-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/availability-calculator-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/notification-dispatcher-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/sms-deploy.yaml
+kubectl apply -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/email-deploy.yaml
 ```
 
 ## generate k8s deployment yaml
