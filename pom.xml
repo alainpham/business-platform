@@ -10,6 +10,7 @@
     <module>notification-dispatcher</module>
     <module>sms</module>
     <module>email</module>
+    <module>flow-log-simulator</module>
   </modules>
   <properties>
     <revision>3.0.0</revision>
