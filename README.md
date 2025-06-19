@@ -117,6 +117,9 @@ kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/busin
 
 kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/k6.yaml
 
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/smoke-test-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/flow-log-simulator-deploy.yaml
+
 
 kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/hub-deploy.yaml
 kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/availability-calculator-deploy.yaml
@@ -125,6 +128,10 @@ kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/busi
 kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/email-deploy.yaml
 
 kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/k6.yaml
+
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/smoke-test-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/flow-log-simulator-deploy.yaml
+
 ```
 
 ## generate k8s deployment yaml
