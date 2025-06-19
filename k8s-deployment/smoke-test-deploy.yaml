@@ -5,20 +5,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: "hub"
-    app.kubernetes.io/component: "hub"
-    app.kubernetes.io/part-of: "hub"
-    app.kubernetes.io/instance: "hub-main"
+    app.kubernetes.io/name: "smoke-test"
+    app.kubernetes.io/component: "smoke-test"
+    app.kubernetes.io/part-of: "smoke-test"
+    app.kubernetes.io/instance: "smoke-test-main"
     app.kubernetes.io/version: "3.0.0"
-  name: "hub"
+  name: "smoke-test"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: "hub"
-      app.kubernetes.io/component: "hub"
-      app.kubernetes.io/part-of: "hub"
-      app.kubernetes.io/instance: "hub-main"
+      app.kubernetes.io/name: "smoke-test"
+      app.kubernetes.io/component: "smoke-test"
+      app.kubernetes.io/part-of: "smoke-test"
+      app.kubernetes.io/instance: "smoke-test-main"
       app.kubernetes.io/version: "3.0.0"
   template:
     metadata:
@@ -27,17 +27,17 @@ spec:
         prometheus.io/port: "8081"
         prometheus.io/path:  "/actuator/prometheus"
         profiles.grafana.com/java.enabled: "true"
-        resource.opentelemetry.io/service.name: "hub"
+        resource.opentelemetry.io/service.name: "smoke-test"
       labels:
-        app.kubernetes.io/name: "hub"
-        app.kubernetes.io/component: "hub"
-        app.kubernetes.io/part-of: "hub"
-        app.kubernetes.io/instance: "hub-main"
+        app.kubernetes.io/name: "smoke-test"
+        app.kubernetes.io/component: "smoke-test"
+        app.kubernetes.io/part-of: "smoke-test"
+        app.kubernetes.io/instance: "smoke-test-main"
         app.kubernetes.io/version: "3.0.0"
     spec:
       containers:
-      - name: hub
-        image: "alainpham/hub:3.0.0"
+      - name: smoke-test
+        image: "alainpham/smoke-test:3.0.0"
         imagePullPolicy: "Always"
         env:
           - name: POD_NAME
@@ -49,13 +49,13 @@ spec:
               fieldRef:
                 fieldPath: metadata.namespace
           - name: APPLICATION_NAME
-            value: hub
+            value: smoke-test
           - name: OTEL_EXPORTER_OTLP_ENDPOINT
             value: "http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318"
           - name: OTEL_JAVAAGENT_ENABLED
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=hub,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.0.0"
+            value: "service.name=smoke-test,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.0.0"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -90,12 +90,12 @@ apiVersion: "v1"
 kind: "Service"
 metadata:
   labels:
-    app.kubernetes.io/name: "hub"
-    app.kubernetes.io/component: "hub"
-    app.kubernetes.io/part-of: "hub"
-    app.kubernetes.io/instance: "hub-main"
+    app.kubernetes.io/name: "smoke-test"
+    app.kubernetes.io/component: "smoke-test"
+    app.kubernetes.io/part-of: "smoke-test"
+    app.kubernetes.io/instance: "smoke-test-main"
     app.kubernetes.io/version: "3.0.0"
-  name: "hub"
+  name: "smoke-test"
 spec:
   type: ClusterIP
   ports:
@@ -104,21 +104,21 @@ spec:
     protocol: "TCP"
     targetPort: 8080
   selector:
-    app.kubernetes.io/name: "hub"
-    app.kubernetes.io/component: "hub"
-    app.kubernetes.io/part-of: "hub"
-    app.kubernetes.io/instance: "hub-main"
+    app.kubernetes.io/name: "smoke-test"
+    app.kubernetes.io/component: "smoke-test"
+    app.kubernetes.io/part-of: "smoke-test"
+    app.kubernetes.io/instance: "smoke-test-main"
     app.kubernetes.io/version: "3.0.0"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: hub
+  name: smoke-test
   labels:
-    app.kubernetes.io/name: "hub"
-    app.kubernetes.io/component: "hub"
-    app.kubernetes.io/part-of: "hub"
-    app.kubernetes.io/instance: "hub-main"
+    app.kubernetes.io/name: "smoke-test"
+    app.kubernetes.io/component: "smoke-test"
+    app.kubernetes.io/part-of: "smoke-test"
+    app.kubernetes.io/instance: "smoke-test-main"
     app.kubernetes.io/version: "3.0.0"
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
@@ -126,14 +126,14 @@ metadata:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
-  - host: hub.codersandbox.com
+  - host: smoke-test.codersandbox.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: hub
+            name: smoke-test
             port:
               number: 8080
 ---
