@@ -30,6 +30,9 @@ mvn clean package exec:exec@rmi exec:exec@build -f availability-calculator/pom.x
 mvn clean package exec:exec@rmi exec:exec@build -f notification-dispatcher/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build -f sms/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build -f email/pom.xml
+
+mvn clean package exec:exec@rmi exec:exec@build -f smoke-test/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build -f flow-log-simulator/pom.xml
 ```
 
 ### run local container in background with otel
@@ -39,6 +42,9 @@ mvn exec:exec@runoteld -f availability-calculator/pom.xml
 mvn exec:exec@runoteld -f notification-dispatcher/pom.xml
 mvn exec:exec@runoteld -f sms/pom.xml
 mvn exec:exec@runoteld -f email/pom.xml
+
+mvn exec:exec@runoteld -f smoke-test/pom.xml
+mvn exec:exec@runoteld -f flow-log-simulator/pom.xml
 ```
 
 ### run k6 test
@@ -55,7 +61,7 @@ docker run -d --rm \
 
 ### stop everything
 ```bash
-docker stop hub availability-calculator notification-dispatcher sms email k6
+docker stop hub availability-calculator notification-dispatcher sms email smoke-test flow-log-simulator k6
 ```
 
 ### build and run local with otel for testing
@@ -66,6 +72,9 @@ mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f availabilit
 mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f notification-dispatcher/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f sms/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f email/pom.xml
+
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f smoke-test/pom.xml
+mvn clean package exec:exec@rmi exec:exec@build exec:exec@runotel -f flow-log-simulator/pom.xml
 ```
 
 ## build and push to dockerhub in multi arch
@@ -77,6 +86,9 @@ mvn clean package exec:exec@buildpush -f availability-calculator/pom.xml
 mvn clean package exec:exec@buildpush -f notification-dispatcher/pom.xml
 mvn clean package exec:exec@buildpush -f sms/pom.xml
 mvn clean package exec:exec@buildpush -f email/pom.xml
+
+mvn clean package exec:exec@buildpush -f smoke-test/pom.xml
+mvn clean package exec:exec@buildpush -f flow-log-simulator/pom.xml
 ```
 
 ## remove all images
@@ -87,6 +99,10 @@ mvn clean exec:exec@rmi -f availability-calculator/pom.xml
 mvn clean exec:exec@rmi -f notification-dispatcher/pom.xml
 mvn clean exec:exec@rmi -f sms/pom.xml
 mvn clean exec:exec@rmi -f email/pom.xml
+
+mvn clean exec:exec@rmi -f smoke-test/pom.xml
+mvn clean exec:exec@rmi -f flow-log-simulator/pom.xml
+
 ```
 
 ## k8s deployment
@@ -119,6 +135,10 @@ mvn exec:exec@kyml -f availability-calculator/pom.xml
 mvn exec:exec@kyml -f notification-dispatcher/pom.xml
 mvn exec:exec@kyml -f sms/pom.xml
 mvn exec:exec@kyml -f email/pom.xml
+
+mvn exec:exec@kyml -f smoke-test/pom.xml
+mvn exec:exec@kyml -f flow-log-simulator/pom.xml
+ 
 
 cp **/target/*-deploy.yaml ./k8s-deployment
 ```
