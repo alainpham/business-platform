@@ -10,6 +10,7 @@
   - [build and push to dockerhub in multi arch](#build-and-push-to-dockerhub-in-multi-arch)
   - [remove all images](#remove-all-images)
   - [k8s deployment](#k8s-deployment)
+  - [k8s deployment without otel](#k8s-deployment-without-otel)
   - [generate k8s deployment yaml](#generate-k8s-deployment-yaml)
 
 # business platform demo
@@ -133,6 +134,36 @@ kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/busi
 kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/flow-log-simulator-deploy.yaml
 
 ```
+
+## k8s deployment without otel
+
+```bash
+kubectl create ns java-apps
+kubectl apply -n java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/hub-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/availability-calculator-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/notification-dispatcher-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/sms-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/email-deploy.yaml
+
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/k6.yaml
+
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/smoke-test-deploy.yaml
+kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment-no-otel/flow-log-simulator-deploy.yaml
+
+
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/hub-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/availability-calculator-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/notification-dispatcher-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/sms-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/email-deploy.yaml
+
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/k6.yaml
+
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/smoke-test-deploy.yaml
+kubectl delete -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/flow-log-simulator-deploy.yaml
+
+```
+
 
 ## generate k8s deployment yaml
 
