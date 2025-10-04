@@ -3,6 +3,8 @@
   - [architecture diagram](#architecture-diagram)
   - [build services and run using docker](#build-services-and-run-using-docker)
     - [build docker locally](#build-docker-locally)
+    - [push to dockerhub](#push-to-dockerhub)
+    - [generate yaml](#generate-yaml)
     - [run local container in background with otel](#run-local-container-in-background-with-otel)
     - [run k6 test](#run-k6-test)
     - [stop everything](#stop-everything)
@@ -34,6 +36,31 @@ mvn clean package exec:exec@rmi exec:exec@build -f email/pom.xml
 
 mvn clean package exec:exec@rmi exec:exec@build -f smoke-test/pom.xml
 mvn clean package exec:exec@rmi exec:exec@build -f flow-log-simulator/pom.xml
+```
+
+### push to dockerhub
+```bash
+mvn exec:exec@push -f hub/pom.xml
+mvn exec:exec@push -f availability-calculator/pom.xml
+mvn exec:exec@push -f notification-dispatcher/pom.xml
+mvn exec:exec@push -f sms/pom.xml
+mvn exec:exec@push -f email/pom.xml
+
+mvn exec:exec@push -f smoke-test/pom.xml
+mvn exec:exec@push -f flow-log-simulator/pom.xml
+```
+
+### generate yaml
+```bash
+mvn install
+mvn exec:exec@kyml -f hub/pom.xml
+mvn exec:exec@kyml -f availability-calculator/pom.xml
+mvn exec:exec@kyml -f notification-dispatcher/pom.xml
+mvn exec:exec@kyml -f sms/pom.xml
+mvn exec:exec@kyml -f email/pom.xml
+
+mvn exec:exec@kyml -f smoke-test/pom.xml
+mvn exec:exec@kyml -f flow-log-simulator/pom.xml
 ```
 
 ### run local container in background with otel

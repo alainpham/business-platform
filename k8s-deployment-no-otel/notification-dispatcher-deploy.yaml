@@ -6,20 +6,20 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "notification-dispatcher"
-    app.kubernetes.io/component: "notification-dispatcher"
-    app.kubernetes.io/part-of: "notification-dispatcher"
-    app.kubernetes.io/instance: "notification-dispatcher-main"
-    app.kubernetes.io/version: "3.0.0"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "3.2.0"
   name: "notification-dispatcher"
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: "notification-dispatcher"
-      app.kubernetes.io/component: "notification-dispatcher"
-      app.kubernetes.io/part-of: "notification-dispatcher"
-      app.kubernetes.io/instance: "notification-dispatcher-main"
-      app.kubernetes.io/version: "3.0.0"
+      app.kubernetes.io/component: "api"
+      app.kubernetes.io/part-of: "business-platform"
+      app.kubernetes.io/instance: "prod"
+      app.kubernetes.io/version: "3.2.0"
   template:
     metadata:
       annotations:
@@ -30,14 +30,14 @@ spec:
         resource.opentelemetry.io/service.name: "notification-dispatcher"
       labels:
         app.kubernetes.io/name: "notification-dispatcher"
-        app.kubernetes.io/component: "notification-dispatcher"
-        app.kubernetes.io/part-of: "notification-dispatcher"
-        app.kubernetes.io/instance: "notification-dispatcher-main"
-        app.kubernetes.io/version: "3.0.0"
+        app.kubernetes.io/component: "api"
+        app.kubernetes.io/part-of: "business-platform"
+        app.kubernetes.io/instance: "prod"
+        app.kubernetes.io/version: "3.2.0"
     spec:
       containers:
       - name: notification-dispatcher
-        image: "alainpham/notification-dispatcher:3.0.0"
+        image: "alainpham/notification-dispatcher:3.2.0"
         imagePullPolicy: "Always"
         env:
           - name: POD_NAME
@@ -55,7 +55,7 @@ spec:
           - name: OTEL_JAVAAGENT_ENABLED
             value: "false"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=notification-dispatcher,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.0.0"
+            value: "service.name=notification-dispatcher,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.2.0"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -91,10 +91,10 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "notification-dispatcher"
-    app.kubernetes.io/component: "notification-dispatcher"
-    app.kubernetes.io/part-of: "notification-dispatcher"
-    app.kubernetes.io/instance: "notification-dispatcher-main"
-    app.kubernetes.io/version: "3.0.0"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "3.2.0"
   name: "notification-dispatcher"
 spec:
   type: ClusterIP
@@ -105,10 +105,10 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "notification-dispatcher"
-    app.kubernetes.io/component: "notification-dispatcher"
-    app.kubernetes.io/part-of: "notification-dispatcher"
-    app.kubernetes.io/instance: "notification-dispatcher-main"
-    app.kubernetes.io/version: "3.0.0"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "3.2.0"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -116,10 +116,10 @@ metadata:
   name: notification-dispatcher
   labels:
     app.kubernetes.io/name: "notification-dispatcher"
-    app.kubernetes.io/component: "notification-dispatcher"
-    app.kubernetes.io/part-of: "notification-dispatcher"
-    app.kubernetes.io/instance: "notification-dispatcher-main"
-    app.kubernetes.io/version: "3.0.0"
+    app.kubernetes.io/component: "api"
+    app.kubernetes.io/part-of: "business-platform"
+    app.kubernetes.io/instance: "prod"
+    app.kubernetes.io/version: "3.2.0"
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"

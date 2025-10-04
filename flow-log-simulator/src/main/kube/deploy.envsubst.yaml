@@ -6,9 +6,9 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+    app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+    app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   name: "${PROJECT_ARTIFACTID}"
 spec:
@@ -16,9 +16,9 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-      app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+      app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+      app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+      app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
       app.kubernetes.io/version: "${PROJECT_VERSION}"
   template:
     metadata:
@@ -30,9 +30,9 @@ spec:
         resource.opentelemetry.io/service.name: "${PROJECT_ARTIFACTID}"
       labels:
         app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-        app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+        app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+        app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+        app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
         app.kubernetes.io/version: "${PROJECT_VERSION}"
     spec:
       containers:
@@ -91,9 +91,9 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+    app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+    app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   name: "${PROJECT_ARTIFACTID}"
 spec:
@@ -105,9 +105,9 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+    app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+    app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
 ---
 apiVersion: networking.k8s.io/v1
@@ -116,9 +116,9 @@ metadata:
   name: ${PROJECT_ARTIFACTID}
   labels:
     app.kubernetes.io/name: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/component: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/part-of: "${PROJECT_ARTIFACTID}"
-    app.kubernetes.io/instance: "${PROJECT_ARTIFACTID}-main"
+    app.kubernetes.io/component: "${KUBE_LABEL_COMPONENT}"
+    app.kubernetes.io/part-of: "${KUBE_LABEL_PARTOF}"
+    app.kubernetes.io/instance: "${KUBE_LABEL_INSTANCE}"
     app.kubernetes.io/version: "${PROJECT_VERSION}"
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
