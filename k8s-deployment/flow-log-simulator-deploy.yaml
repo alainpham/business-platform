@@ -6,9 +6,6 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
     app.kubernetes.io/version: "3.2.0"
   name: "flow-log-simulator"
 spec:
@@ -16,9 +13,6 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: "flow-log-simulator"
-      app.kubernetes.io/component: "api"
-      app.kubernetes.io/part-of: "business-platform"
-      app.kubernetes.io/instance: "prod"
       app.kubernetes.io/version: "3.2.0"
   template:
     metadata:
@@ -30,9 +24,6 @@ spec:
         resource.opentelemetry.io/service.name: "flow-log-simulator"
       labels:
         app.kubernetes.io/name: "flow-log-simulator"
-        app.kubernetes.io/component: "api"
-        app.kubernetes.io/part-of: "business-platform"
-        app.kubernetes.io/instance: "prod"
         app.kubernetes.io/version: "3.2.0"
     spec:
       containers:
@@ -91,9 +82,6 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
     app.kubernetes.io/version: "3.2.0"
   name: "flow-log-simulator"
 spec:
@@ -105,9 +93,6 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
     app.kubernetes.io/version: "3.2.0"
 ---
 apiVersion: networking.k8s.io/v1
@@ -116,9 +101,6 @@ metadata:
   name: flow-log-simulator
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
     app.kubernetes.io/version: "3.2.0"
   annotations:
     nginx.ingress.kubernetes.io/ssl-passthrough: "false"
