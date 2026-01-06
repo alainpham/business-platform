@@ -12,6 +12,7 @@
   - [build and push to dockerhub in multi arch](#build-and-push-to-dockerhub-in-multi-arch)
   - [remove all images](#remove-all-images)
   - [k8s deployment](#k8s-deployment)
+  - [additional things](#additional-things)
   - [k8s deployment without otel](#k8s-deployment-without-otel)
   - [generate k8s deployment yaml](#generate-k8s-deployment-yaml)
 
@@ -145,6 +146,11 @@ kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/busin
 
 kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/k6.yaml
 
+```
+
+## additional things
+
+```sh
 kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/smoke-test-deploy.yaml
 kubectl apply -n  java-apps -f https://raw.githubusercontent.com/alainpham/business-platform/refs/heads/master/k8s-deployment/flow-log-simulator-deploy.yaml
 
