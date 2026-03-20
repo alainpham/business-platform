@@ -378,8 +378,7 @@
               <workingDirectory>${project.basedir}</workingDirectory>
               <arguments>
                 <argument>-c</argument>
-                <argument>envsubst &lt; src/main/kube/deploy.envsubst.yaml | kubectl
-                  delete -f -</argument>
+                <argument>envsubst &lt; src/main/kube/deploy.envsubst.yaml | kubectl delete -f -</argument>
               </arguments>
               <environmentVariables>
                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>
@@ -403,8 +402,7 @@
               <workingDirectory>${project.basedir}</workingDirectory>
               <arguments>
                 <argument>-c</argument>
-                <argument>envsubst &lt; src/main/kube/deploy.envsubst.yaml | kubectl
-                  apply -f -</argument>
+                <argument>envsubst &lt; src/main/kube/deploy.envsubst.yaml | kubectl apply -f -</argument>
               </arguments>
               <environmentVariables>
                 <PROJECT_ARTIFACTID>${project.artifactId}</PROJECT_ARTIFACTID>

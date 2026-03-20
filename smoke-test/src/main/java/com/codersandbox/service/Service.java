@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
@@ -40,5 +42,16 @@ public class Service {
         List<Object> listObjects = List.of(person);
         view.update("person", listObjects);
         return person;
+    }
+
+    @Scheduled(fixedRate = 5000)
+    public void schedulePingCall() {
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity("http://localhost:8080/ping", String.class);
+            logger.info("Ping response: " + response.getStatusCode());
+        } catch (Exception e) {
+            logger.error("Ping call failed", e);
+        }
     }
 }
