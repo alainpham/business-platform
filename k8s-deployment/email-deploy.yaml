@@ -6,14 +6,14 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "email"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   name: "email"
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: "email"
-      app.kubernetes.io/version: "3.2.0"
+      app.kubernetes.io/version: "3.4.0"
   template:
     metadata:
       annotations:
@@ -24,11 +24,11 @@ spec:
         resource.opentelemetry.io/service.name: "email"
       labels:
         app.kubernetes.io/name: "email"
-        app.kubernetes.io/version: "3.2.0"
+        app.kubernetes.io/version: "3.4.0"
     spec:
       containers:
       - name: email
-        image: "alainpham/email:3.2.0"
+        image: "alainpham/email:3.4.0"
         imagePullPolicy: "Always"
         env:
           - name: POD_NAME
@@ -46,7 +46,7 @@ spec:
           - name: OTEL_JAVAAGENT_ENABLED
             value: "true"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=email,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.2.0"
+            value: "service.name=email,service.namespace=$(POD_NAMESPACE),service.version=3.4.0,service.instance.id=$(POD_NAMESPACE).$(POD_NAME).email"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -82,7 +82,7 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "email"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   name: "email"
 spec:
   type: ClusterIP
@@ -93,7 +93,7 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "email"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -101,11 +101,8 @@ metadata:
   name: email
   labels:
     app.kubernetes.io/name: "email"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   annotations:
-    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
   - host: email.codersandbox.com

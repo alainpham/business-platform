@@ -121,9 +121,6 @@ metadata:
     app.kubernetes.io/instance: "prod"
     app.kubernetes.io/version: "3.2.0"
   annotations:
-    nginx.ingress.kubernetes.io/ssl-passthrough: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   rules:
   - host: flow-log-simulator.codersandbox.com

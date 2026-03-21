@@ -17,17 +17,17 @@
     <module>smoke-test</module>
   </modules>
   <properties>
-    <revision>3.3.0</revision>
+    <revision>3.4.0</revision>
 
     <spring.boot.version>4.0.1</spring.boot.version>
-    <springdoc.openapi.version>3.0.1</springdoc.openapi.version>
-    <opentelemetry.version>2.24.0</opentelemetry.version>
-    <temurin.image.version>17.0.17_10-jre</temurin.image.version>
+    <springdoc.openapi.version>3.0.2</springdoc.openapi.version>
+    <opentelemetry.version>2.26.0</opentelemetry.version>
+    <temurin.image.version>17.0.18_8-jre</temurin.image.version>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.source>17</maven.compiler.source>
-    <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
+    <maven-compiler-plugin.version>3.15.0</maven-compiler-plugin.version>
     <exec-maven-plugin.version>3.6.3</exec-maven-plugin.version>
 
     <container.registry>alainpham</container.registry>

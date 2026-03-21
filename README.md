@@ -84,7 +84,7 @@ docker run -d --rm \
   -v $(pwd)/k6/script.js:/config/script.js:ro \
   -v $(pwd)/k6/loop.sh:/home/k6/loop.sh:ro \
   --entrypoint /bin/sh \
-  grafana/k6:1.0.0-with-browser \
+  grafana/k6:grafana/k6:latest-with-browser \
   /home/k6/loop.sh
 ```
 
@@ -117,6 +117,7 @@ mvn clean package exec:exec@buildpush -f sms/pom.xml
 mvn clean package exec:exec@buildpush -f email/pom.xml
 
 mvn clean package exec:exec@buildpush -f smoke-test/pom.xml
+
 mvn clean package exec:exec@buildpush -f flow-log-simulator/pom.xml
 ```
 
