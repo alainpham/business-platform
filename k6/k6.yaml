@@ -108,7 +108,7 @@ spec:
         spec:
           containers:
           - name: k6
-            image: "grafana/k6:grafana/k6:latest-with-browser"
+            image: "grafana/k6:latest-with-browser"
             args: ["run", "/scripts/script.js"]
             imagePullPolicy: IfNotPresent
             env:
