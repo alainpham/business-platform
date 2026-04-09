@@ -17,7 +17,7 @@
     <module>smoke-test</module>
   </modules>
   <properties>
-    <revision>3.4.0</revision>
+    <revision>3.5.0</revision>
 
     <spring.boot.version>4.0.5</spring.boot.version>
     <springdoc.openapi.version>3.0.2</springdoc.openapi.version>
@@ -32,9 +32,9 @@
 
     <container.registry>alainpham</container.registry>
     <kube.otlp.endpoint>http://grafana-k8s-monitoring-alloy-receiver.default.svc.cluster.local:4318</kube.otlp.endpoint>
-    <kube.ingress.root.domain>codersandbox.com</kube.ingress.root.domain>
+    <kube.ingress.root.domain>kubes.dns.army</kube.ingress.root.domain>
     <docker.network>primenet</docker.network>
-    <docker.root.domain>zez.duckdns.org</docker.root.domain>
+    <docker.root.domain>houze.dns.army</docker.root.domain>
     <docker.otlp.endpoint>http://alloy:4318</docker.otlp.endpoint>
 
     <kube.label.component>api</kube.label.component>

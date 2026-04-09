@@ -6,20 +6,14 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "smoke-test"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.5.0"
   name: "smoke-test"
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: "smoke-test"
-      app.kubernetes.io/component: "api"
-      app.kubernetes.io/part-of: "business-platform"
-      app.kubernetes.io/instance: "prod"
-      app.kubernetes.io/version: "3.2.0"
+      app.kubernetes.io/version: "3.5.0"
   template:
     metadata:
       annotations:
@@ -30,14 +24,11 @@ spec:
         resource.opentelemetry.io/service.name: "smoke-test"
       labels:
         app.kubernetes.io/name: "smoke-test"
-        app.kubernetes.io/component: "api"
-        app.kubernetes.io/part-of: "business-platform"
-        app.kubernetes.io/instance: "prod"
-        app.kubernetes.io/version: "3.2.0"
+        app.kubernetes.io/version: "3.5.0"
     spec:
       containers:
       - name: smoke-test
-        image: "alainpham/smoke-test:3.2.0"
+        image: "alainpham/smoke-test:3.5.0"
         imagePullPolicy: "Always"
         env:
           - name: POD_NAME
@@ -55,7 +46,7 @@ spec:
           - name: OTEL_JAVAAGENT_ENABLED
             value: "false"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=smoke-test,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.2.0"
+            value: "service.name=smoke-test,service.namespace=$(POD_NAMESPACE),service.version=3.5.0,service.instance.id=$(POD_NAMESPACE).$(POD_NAME).smoke-test"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -91,10 +82,7 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "smoke-test"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.5.0"
   name: "smoke-test"
 spec:
   type: ClusterIP
@@ -105,10 +93,7 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "smoke-test"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.5.0"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -116,14 +101,11 @@ metadata:
   name: smoke-test
   labels:
     app.kubernetes.io/name: "smoke-test"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.5.0"
   annotations:
 spec:
   rules:
-  - host: smoke-test.codersandbox.com
+  - host: smoke-test.kubes.dns.army
     http:
       paths:
       - path: /

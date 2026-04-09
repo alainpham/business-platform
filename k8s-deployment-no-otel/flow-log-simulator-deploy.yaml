@@ -6,20 +6,14 @@ kind: Deployment
 metadata:
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   name: "flow-log-simulator"
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: "flow-log-simulator"
-      app.kubernetes.io/component: "api"
-      app.kubernetes.io/part-of: "business-platform"
-      app.kubernetes.io/instance: "prod"
-      app.kubernetes.io/version: "3.2.0"
+      app.kubernetes.io/version: "3.4.0"
   template:
     metadata:
       annotations:
@@ -30,14 +24,11 @@ spec:
         resource.opentelemetry.io/service.name: "flow-log-simulator"
       labels:
         app.kubernetes.io/name: "flow-log-simulator"
-        app.kubernetes.io/component: "api"
-        app.kubernetes.io/part-of: "business-platform"
-        app.kubernetes.io/instance: "prod"
-        app.kubernetes.io/version: "3.2.0"
+        app.kubernetes.io/version: "3.4.0"
     spec:
       containers:
       - name: flow-log-simulator
-        image: "alainpham/flow-log-simulator:3.2.0"
+        image: "alainpham/flow-log-simulator:3.4.0"
         imagePullPolicy: "Always"
         env:
           - name: POD_NAME
@@ -55,7 +46,7 @@ spec:
           - name: OTEL_JAVAAGENT_ENABLED
             value: "false"
           - name: OTEL_RESOURCE_ATTRIBUTES
-            value: "service.name=flow-log-simulator,service.namespace=$(POD_NAMESPACE),service.instance.id=$(POD_NAME),service.version=3.2.0"
+            value: "service.name=flow-log-simulator,service.namespace=$(POD_NAMESPACE),service.version=3.4.0,service.instance.id=$(POD_NAMESPACE).$(POD_NAME).flow-log-simulator"
         livenessProbe:
           httpGet:
             path: "/actuator/health"
@@ -91,10 +82,7 @@ kind: "Service"
 metadata:
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   name: "flow-log-simulator"
 spec:
   type: ClusterIP
@@ -105,10 +93,7 @@ spec:
     targetPort: 8080
   selector:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -116,10 +101,7 @@ metadata:
   name: flow-log-simulator
   labels:
     app.kubernetes.io/name: "flow-log-simulator"
-    app.kubernetes.io/component: "api"
-    app.kubernetes.io/part-of: "business-platform"
-    app.kubernetes.io/instance: "prod"
-    app.kubernetes.io/version: "3.2.0"
+    app.kubernetes.io/version: "3.4.0"
   annotations:
 spec:
   rules:
