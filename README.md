@@ -87,7 +87,7 @@ docker run -d --rm \
   -v $(pwd)/k6/script.js:/config/script.js:ro \
   -v $(pwd)/k6/loop.sh:/home/k6/loop.sh:ro \
   --entrypoint /bin/sh \
-  grafana/k6:grafana/k6:latest-with-browser \
+  grafana/k6:latest-with-browser \
   /home/k6/loop.sh
 ```
 
