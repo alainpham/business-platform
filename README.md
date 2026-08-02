@@ -62,6 +62,9 @@ mvn exec:exec@kyml -f email/pom.xml
 
 mvn exec:exec@kyml -f smoke-test/pom.xml
 mvn exec:exec@kyml -f flow-log-simulator/pom.xml
+
+cp **/target/*-deploy.yaml ./k8s-deployment
+
 ```
 
 ### run local container in background with otel
